@@ -26,22 +26,40 @@ class Run extends Config
         $this->client = new Client();
     }
 
+
+    /**
+     * @return bool|mixed
+     */
     public function test_post()
     {
 
-        $verify = $this->client->request('POST', Config::VERIFY_URL, [
-            'body' => json_encode([
-//                'account' => 'admin',
-//                'password' => 'fghjkl',
-//                'type' => 'customer',
+        // 实际上无法模拟登录 cookie是在客户端生成的！
+
+//        $verify = $this->client->request('POST', Config::VERIFY_URL, [
+//            'headers'     => [
+//                'User-Agent'   => "okhttp/3.4.1",
+//                'Content-Type' => "application/x-www-form-urlencoded",
+//            ],
+//            'form_params' => [
+//                'username' => Config::USERNAME,
+//                'password' => md5(Config::PASSWORD),
+//            ],
+//
+//        ]);
+
+        $verify = $this->curl(
+            Config::VERIFY_URL,
+            [
                 'username' => Config::USERNAME,
                 'password' => md5(Config::PASSWORD),
-            ]),
-            'headers' => [
-                'User-Agent'   => 'okhttp/3.4.1',
-                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            1,
+            1,
+            [
+                'User-Agent'   => "okhttp/3.4.1",
+                'Content-Type' => "application/x-www-form-urlencoded",
             ]
-        ]);
+        );
 
         return $verify;
     }
@@ -208,9 +226,9 @@ class Run extends Config
 
 $run = new Run();
 
-var_dump( $run->test_post()->getHeaders());
+//var_dump($run->test_post());
 //var_dump($run->getCookie());
-die();
+//die();
 
 $action = $run->actionAll();
 
