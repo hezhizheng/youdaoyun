@@ -26,6 +26,26 @@ class Run extends Config
         $this->client = new Client();
     }
 
+    public function test_post()
+    {
+
+        $verify = $this->client->request('POST', Config::VERIFY_URL, [
+            'body' => json_encode([
+//                'account' => 'admin',
+//                'password' => 'fghjkl',
+//                'type' => 'customer',
+                'username' => Config::USERNAME,
+                'password' => md5(Config::PASSWORD),
+            ]),
+            'headers' => [
+                'User-Agent'   => 'okhttp/3.4.1',
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ]
+        ]);
+
+        return $verify;
+    }
+
     public function getCookie()
     {
         // 验证是否要输入验证码
@@ -38,11 +58,11 @@ class Run extends Config
                 ],
                 [
                     'headers' => [
-                        'User-Agent' => 'okhttp/3.4.1',
+                        'User-Agent'   => 'okhttp/3.4.1',
                         'Content-Type' => 'application/x-www-form-urlencoded',
                     ]
                 ]
-            );
+            )->gethtml();
         } catch (\Exception $exception) {
             $this->save_log('verify_error');
             $this->save_log($exception->getCode() . $exception->getMessage());
@@ -73,8 +93,8 @@ class Run extends Config
                     'username' => Config::USERNAME,
                     'password' => md5(Config::PASSWORD),
                 ],
-                'headers' => [
-                    'User-Agent' => 'okhttp/3.4.1',
+                'headers'     => [
+                    'User-Agent'   => 'okhttp/3.4.1',
                     'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
             ]);
@@ -106,7 +126,7 @@ class Run extends Config
                 $this->getPublicParam(),
                 [
                     'headers' => [
-                        'Cookie' => Config::COOKIE,
+                        'Cookie'       => Config::COOKIE,
                         'Content-Type' => 'application/x-www-form-urlencoded',
                     ]
                 ]);
@@ -143,7 +163,7 @@ class Run extends Config
             $this->getPublicParam(),
             [
                 'headers' => [
-                    'Cookie' => Config::COOKIE,
+                    'Cookie'       => Config::COOKIE,
                     'Content-Type' => 'application/x-www-form-urlencoded',
                 ]
             ])->getHtml();
@@ -188,8 +208,9 @@ class Run extends Config
 
 $run = new Run();
 
+var_dump( $run->test_post()->getHeaders());
 //var_dump($run->getCookie());
-//die();
+die();
 
 $action = $run->actionAll();
 
