@@ -12,7 +12,7 @@ namespace app;
 use GuzzleHttp\Client;
 use QL\QueryList;
 
-require '../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 require_once 'config.php';
 
 class Run extends Config
