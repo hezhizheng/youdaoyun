@@ -73,11 +73,10 @@ class Config{
     /**
      * 记录错误日志
      * @param $res
+     * @param $address
      */
-    public function save_log($res) {
-        $err_date = date("Ymd", time());
-        //$address = '/var/log/error';
-        $address = './error';
+    public function save_log($res,$address='./error') {
+        $err_date = date("Y-m-d", time());
         if (!is_dir($address)) {
             mkdir($address, 0700, true);
         }

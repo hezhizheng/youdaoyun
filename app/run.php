@@ -20,10 +20,13 @@ class Run extends Config
     protected $queryList;
     protected $client;
 
+    public $log_path;
+
     public function __construct()
     {
         $this->queryList = new QueryList();
         $this->client = new Client();
+        $this->log_path = __DIR__.'/../error';
     }
 
 
@@ -149,11 +152,11 @@ class Run extends Config
                     ]
                 ]);
             $html = $ql->getHtml();
-            $this->save_log($html); // 保存日志
+            $this->save_log($html,$this->log_path); // 保存日志
             return $html;
         } catch (\Exception $exception) {
-            $this->save_log('SignIn_error');
-            $this->save_log($exception->getCode() . $exception->getMessage());
+            $this->save_log('SignIn_error',$this->log_path);
+            $this->save_log($exception->getCode() . $exception->getMessage(),$this->log_path);
             return $exception->getCode() . $exception->getMessage();
         };
 
@@ -166,8 +169,8 @@ class Run extends Config
             $html = $this->postAd();
             return $html;
         } catch (\Exception $exception) {
-            $this->save_log('ad_error');
-            $this->save_log($exception->getCode() . $exception->getMessage());
+            $this->save_log('ad_error',$this->log_path);
+            $this->save_log($exception->getCode() . $exception->getMessage(),$this->log_path);
             return $exception->getCode() . $exception->getMessage();
         };
 
@@ -185,7 +188,7 @@ class Run extends Config
                     'Content-Type' => 'application/x-www-form-urlencoded',
                 ]
             ])->getHtml();
-        $this->save_log($post);// 保存日志
+        $this->save_log($post,$this->log_path);// 保存日志
         if (json_decode($post, true)['todayCount'] < 3) { // 主动看三次广告
             $post = $this->actionAd();
         }
@@ -241,4 +244,4 @@ print($ad_info);
 $run->save_log([
     $sing_in_info,
     $ad_info,
-]);
+],$run->log_path);
