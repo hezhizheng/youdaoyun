@@ -11,15 +11,6 @@ namespace app;
 
 class Config{
 
-    const USERNAME = 'hezhizheng@126.com';
-    const PASSWORD = '4212671';
-
-    // 检查是否要输入验证码
-//    const VERIFY_URL = 'https://note.youdao.com/login/acc/urs/verify/check?app=android&product=YNOTE&tp=urstoken&cf=7&show=true&systemName=android&systemVersion=24&resolution=2040*1080&pdtVersion=6.2.3&mac=003a383054459c141e8c2495ee7dc6c0&deviceType=android&os=android&os_ver=24&device_name=BND-AL10&device_model=BND-AL10&device_id=android-8bbbac7d-d5c9-469a-bf0a-f3bcf9213f3e-1522255716140&client_ver=6.2.3&device_type=android';
-   const VERIFY_URL = 'https://note.youdao.com/login/acc/urs/verify/check?app=android&product=YNOTE&tp=urstoken&cf=7&show=true&systemName=android&systemVersion=24&resolution=2040*1080&pdtVersion=6.2.3&mac=1476db261ab618dfcb0f7fac60593429&deviceType=android&os=android&os_ver=24&device_name=BND-AL10&device_model=BND-AL10&device_id=android-8bbbac7d-d5c9-469a-bf0a-f3bcf9213f3e-1522255716140&client_ver=6.2.3&device_type=android';
-
-    const LOGIN_URL = 'https://note.youdao.com/login/acc/login?app=android&product=YNOTE&tp=urstoken&cf=7&show=true&vcode=zb78u&systemName=android&systemVersion=24&resolution=2040*1080&pdtVersion=6.2.3&mac=003a383054459c141e8c2495ee7dc6c0&deviceType=android&os=android&os_ver=24&device_name=BND-AL10&device_model=BND-AL10&device_id=android-8bbbac7d-d5c9-469a-bf0a-f3bcf9213f3e-1522255716140&client_ver=6.2.3&device_type=android';
-
     const SIGN_IN_URL = 'https://note.youdao.com/yws/mapi/user?method=checkin'; // 签到获取mb url
 
     const AD_URL = 'https://note.youdao.com/yws/mapi/user?method=adPrompt'; // 看广告获取mb url
@@ -97,60 +88,6 @@ class Config{
             $res_real = "$error_date\t$file\t$res\n";
             error_log($res_real, 3, $address);
         }
-    }
-
-    public function curl($url, $params = false, $ispost = 0, $https = 0, $header = [])
-    {
-        $httpInfo = array();
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0); //强制协议为1.0
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect: ')); //头部要送出'Expect: '
-        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4); //强制使用IPV4协议解析域名
-//        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36');
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 500);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        if ($https) {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); // 对认证证书来源的检查
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE); // 从证书中检查SSL加密算法是否存在
-            curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-        }
-
-        if (count($header)) {
-            $params = json_encode($params);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        }
-
-        if ($ispost) {
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-            curl_setopt($ch, CURLOPT_URL, $url);
-        } else {
-            if ($params) {
-                if (is_array($params)) {
-                    $params = http_build_query($params);
-                }
-                curl_setopt($ch, CURLOPT_URL, $url . '?' . $params);
-            } else {
-                curl_setopt($ch, CURLOPT_URL, $url);
-            }
-        }
-
-        $response = curl_exec($ch);
-
-        if ($response === FALSE) {
-            $this->save_log("cURL Error: " . curl_error($ch));
-
-            return false;
-        }
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $this->save_log($httpCode);
-        $httpInfo = array_merge($httpInfo, curl_getinfo($ch));
-        $this->save_log($httpInfo);
-        curl_close($ch);
-        return $response;
     }
 
 }
