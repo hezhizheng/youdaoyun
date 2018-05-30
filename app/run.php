@@ -9,7 +9,6 @@
 
 namespace app;
 
-use GuzzleHttp\Client;
 use QL\QueryList;
 
 require __DIR__.'/../vendor/autoload.php';
@@ -18,14 +17,12 @@ require_once 'config.php';
 class Run extends Config
 {
     protected $queryList;
-    protected $client;
 
     public $log_path;
 
     public function __construct()
     {
         $this->queryList = new QueryList();
-        $this->client = new Client();
         $this->log_path = __DIR__.'/../error';
     }
 
