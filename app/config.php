@@ -15,7 +15,8 @@ class Config{
 
     const AD_URL = 'https://note.youdao.com/yws/mapi/user?method=adPrompt'; // 看广告获取mb url
 
-    const COOKIE = 'YNOTE_LOGIN=true; YNOTE_SESS=v2|rtpifj0dlWOm0Mpy0LQB0wS0fzGhMUM0QFRHgLnLTz0k5hfPuOfYM0qLOLQ40LzfR6F6LeuRfYf0OEkMTuPMJ4Rg46LPL64ez0';
+    const COOKIE = 'YNOTE_LOGIN=true; YNOTE_SESS=v2|lGiQnykblWQynHeKhH6B0kE6LY50LlERwFkLwzO464RYGRLUf0HzE0TunHQy6LeB0OGOMll0Hqy0euP4JK6MYY0w4kfQu0LqyR
+';
 
     const PUBLIC_PARAM = [
         'imei' => '003a383054459c141e8c2495ee7dc6c0',
