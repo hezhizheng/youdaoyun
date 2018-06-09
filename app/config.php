@@ -11,12 +11,14 @@ namespace app;
 
 class Config{
 
+    const LOG = 'https://note.youdao.com/yws/api/personal/log?method=android'; // 登录，免密码
+
     const SIGN_IN_URL = 'https://note.youdao.com/yws/mapi/user?method=checkin'; // 签到获取mb url
 
     const AD_URL = 'https://note.youdao.com/yws/mapi/user?method=adPrompt'; // 看广告获取mb url
 
-    const COOKIE = 'YNOTE_LOGIN=true; YNOTE_SESS=v2|lGiQnykblWQynHeKhH6B0kE6LY50LlERwFkLwzO464RYGRLUf0HzE0TunHQy6LeB0OGOMll0Hqy0euP4JK6MYY0w4kfQu0LqyR
-';
+    const COOKIE = 'YNOTE_LOGIN=true; YNOTE_SESS=v2|lGiQnykblWQynHeKhH6B0kE6LY50LlERwFkLwzO464RYGRLUf0HzE0TunHQy6LeB0OGOMll0Hqy0euP4JK6MYY0w4kfQu0LqyR; OUTFOX_SEARCH_USER_ID=105969621@10.200.160.13';
+
 
     const PUBLIC_PARAM = [
         'imei' => '003a383054459c141e8c2495ee7dc6c0',
@@ -50,6 +52,11 @@ class Config{
     public function getPublicParam()
     {
         return self::PUBLIC_PARAM; //eval()函数把字符串作为PHP代码执行
+    }
+
+    public function getLogUrl()
+    {
+        return self::LOG;
     }
 
     public function getSignInUrl()

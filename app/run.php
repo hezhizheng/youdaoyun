@@ -11,7 +11,7 @@ namespace app;
 
 use QL\QueryList;
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 require_once 'config.php';
 
 class Run extends Config
@@ -23,7 +23,31 @@ class Run extends Config
     public function __construct()
     {
         $this->queryList = new QueryList();
-        $this->log_path = __DIR__.'/../error';
+        $this->log_path = __DIR__ . '/../error';
+    }
+
+    public function actionLog()
+    {
+        try {
+            $ql = new QueryList();
+            $ql->post(
+                $this->getLogUrl(),
+                json_encode($this->getPublicParam()),
+                [
+                    'headers' => [
+                        'Cookie' => Config::COOKIE,
+                        'Content-Type' => 'application/json',
+                    ]
+                ]);
+//            var_dump($ql);exit();
+            $html = $ql->getHtml();
+            $this->save_log($html, $this->log_path); // 保存日志
+            return $html;
+        } catch (\Exception $exception) {
+            $this->save_log('LoginIn_error', $this->log_path);
+            $this->save_log($exception->getCode() . $exception->getMessage(), $this->log_path);
+            return $exception->getCode() . $exception->getMessage();
+        };
     }
 
     public function actionSignIn()
@@ -36,16 +60,16 @@ class Run extends Config
                 $this->getPublicParam(),
                 [
                     'headers' => [
-                        'Cookie'       => Config::COOKIE,
+                        'Cookie' => Config::COOKIE,
                         'Content-Type' => 'application/x-www-form-urlencoded',
                     ]
                 ]);
             $html = $ql->getHtml();
-            $this->save_log($html,$this->log_path); // 保存日志
+            $this->save_log($html, $this->log_path); // 保存日志
             return $html;
         } catch (\Exception $exception) {
-            $this->save_log('SignIn_error',$this->log_path);
-            $this->save_log($exception->getCode() . $exception->getMessage(),$this->log_path);
+            $this->save_log('SignIn_error', $this->log_path);
+            $this->save_log($exception->getCode() . $exception->getMessage(), $this->log_path);
             return $exception->getCode() . $exception->getMessage();
         };
 
@@ -58,8 +82,8 @@ class Run extends Config
             $html = $this->postAd();
             return $html;
         } catch (\Exception $exception) {
-            $this->save_log('ad_error',$this->log_path);
-            $this->save_log($exception->getCode() . $exception->getMessage(),$this->log_path);
+            $this->save_log('ad_error', $this->log_path);
+            $this->save_log($exception->getCode() . $exception->getMessage(), $this->log_path);
             return $exception->getCode() . $exception->getMessage();
         };
 
@@ -73,11 +97,11 @@ class Run extends Config
             $this->getPublicParam(),
             [
                 'headers' => [
-                    'Cookie'       => Config::COOKIE,
+                    'Cookie' => Config::COOKIE,
                     'Content-Type' => 'application/x-www-form-urlencoded',
                 ]
             ])->getHtml();
-        $this->save_log($post,$this->log_path);// 保存日志
+        $this->save_log($post, $this->log_path);// 保存日志
         if (json_decode($post, true)['todayCount'] < 3) { // 主动看三次广告
             $post = $this->actionAd();
         }
@@ -88,9 +112,17 @@ class Run extends Config
 
     public function actionAll()
     {
+
+        $log = $this->actionLog();
+
         $actionSignIn = $this->actionSignIn();
 
         $ad = $this->actionAd();
+
+        $log_info = '登录状态未知。';
+        if ($log=='') {
+            $log_info = '登录成功！'; // 带验证！！！
+        }
 
         if (json_decode($actionSignIn, true)['success'] == 1) {
             $SignIn_info = '恭喜你，签到获取MB成功！';
@@ -109,6 +141,7 @@ class Run extends Config
         }
 
         return [
+            'log_info' => $log_info,
             'sing_in' => $SignIn_info,
             'ad_info' => $ad_info,
         ];
@@ -124,13 +157,16 @@ $run = new Run();
 
 $action = $run->actionAll();
 
+$login_info = '登录状态：' . $action['log_info']. "\n";
 $sing_in_info = '签到状态：' . $action['sing_in'];
 $ad_info = "\n" . '看广告状态：' . $action['ad_info'] . "\n";
 
+print($login_info);
 print($sing_in_info);
 print($ad_info);
 
 $run->save_log([
+    $login_info,
     $sing_in_info,
     $ad_info,
-],$run->log_path);
+], $run->log_path);
