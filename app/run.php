@@ -32,7 +32,7 @@ class Run extends Config
             $ql = new QueryList();
             $ql->post(
                 $this->getLogUrl(),
-                json_encode($this->getPublicParam()),
+                $this->getPublicParam(),
                 [
                     'headers' => [
                         'Cookie' => Config::COOKIE,
