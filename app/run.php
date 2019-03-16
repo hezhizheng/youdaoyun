@@ -109,6 +109,39 @@ class Run extends Config
         return $post;
     }
 
+    public function actionVideoAd()
+    {
+
+        try {
+            $html = $this->postVideoAd();
+            return $html;
+        } catch (\Exception $exception) {
+            $this->save_log('video_ad_error', $this->log_path);
+            $this->save_log($exception->getCode() . $exception->getMessage(), $this->log_path);
+            return $exception->getCode() . $exception->getMessage();
+        };
+
+    }
+
+    private function postVideoAd()
+    {
+        $ql = new QueryList();
+        $post = $ql->post(
+            $this->getVideoAdUrl(),
+            $this->getPublicParam(),
+            [
+                'headers' => [
+                    'Cookie' => Config::COOKIE,
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ]
+            ])->getHtml();
+        $this->save_log($post, $this->log_path);// 保存日志
+        if (json_decode($post, true)['todayCount'] < 3) { // 主动看三次广告
+            $post = $this->postVideoAd();
+        }
+
+        return $post;
+    }
 
     public function actionAll()
     {
@@ -118,6 +151,8 @@ class Run extends Config
         $actionSignIn = $this->actionSignIn();
 
         $ad = $this->actionAd();
+
+        $videoAd = $this->actionVideoAd();
 
         $log_info = '登录状态未知。';
         if ($log=='') {
@@ -140,10 +175,19 @@ class Run extends Config
 
         }
 
+        if (json_decode($videoAd, true)['success'] == true) {
+            $video_ad_info = '恭喜你，看视频广告获取MB成功！' . '此次为你主动看了 ' . json_decode($videoAd, true)['todayCount'] . ' 次广告';
+
+        } else {
+            $video_ad_info = '看广告获取MB失败！你可能已经看过超过三次，目前已观看 ' . json_decode($videoAd, true)['todayCount'] . ' 次';
+
+        }
+
         return [
             'log_info' => $log_info,
             'sing_in' => $SignIn_info,
             'ad_info' => $ad_info,
+            'video_ad_info' => $video_ad_info
         ];
     }
 
@@ -160,13 +204,16 @@ $action = $run->actionAll();
 $login_info = '登录状态：' . $action['log_info']. "\n";
 $sing_in_info = '签到状态：' . $action['sing_in'];
 $ad_info = "\n" . '看广告状态：' . $action['ad_info'] . "\n";
+$video_ad_info = '看视频广告状态：' . $action['video_ad_info'] . "\n";
 
 print($login_info);
 print($sing_in_info);
 print($ad_info);
+print($video_ad_info);
 
 $run->save_log([
     $login_info,
     $sing_in_info,
     $ad_info,
+    $video_ad_info
 ], $run->log_path);

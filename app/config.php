@@ -17,6 +17,8 @@ class Config{
 
     const AD_URL = 'https://note.youdao.com/yws/mapi/user?method=adPrompt'; // 看广告获取mb url
 
+    const VIDEO_AD_URL = 'https://note.youdao.com/yws/mapi/user?method=adRandomPrompt'; // 看视频广告获取mb url
+
     const COOKIE = 'YNOTE_LOGIN=true; YNOTE_SESS=v2|lGiQnykblWQynHeKhH6B0kE6LY50LlERwFkLwzO464RYGRLUf0HzE0TunHQy6LeB0OGOMll0Hqy0euP4JK6MYY0w4kfQu0LqyR; OUTFOX_SEARCH_USER_ID=105969621@10.200.160.13';
 
 
@@ -67,6 +69,11 @@ class Config{
     public function getAdUrl()
     {
         return self::AD_URL;
+    }
+
+    public function getVideoAdUrl()
+    {
+        return self::VIDEO_AD_URL;
     }
 
     /**
