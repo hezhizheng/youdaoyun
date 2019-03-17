@@ -179,7 +179,7 @@ class Run extends Config
             $video_ad_info = '恭喜你，看视频广告获取MB成功！' . '此次为你主动看了 ' . json_decode($videoAd, true)['todayCount'] . ' 次广告';
 
         } else {
-            $video_ad_info = '看广告获取MB失败！你可能已经看过超过三次，目前已观看 ' . json_decode($videoAd, true)['todayCount'] . ' 次';
+            $video_ad_info = '看视频广告获取MB失败！你可能已经看过超过三次，目前已观看 ' . json_decode($videoAd, true)['todayCount'] . ' 次';
 
         }
 
