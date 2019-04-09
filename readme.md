@@ -36,6 +36,6 @@ Liunx 系统下
 0 0 * * * /usr/bin/php youdao/app/run.php  // 填绝对路径！！！
 ```
 
-> 关于cookie的有效期：暂时不确定有效期是多久，目前的cookie已经用了好几天了，并没有失效。
+> 关于cookie的有效期：暂时不确定有效期是多久，建议不定时的打开APP端保证cookie的有效期。
 
 
