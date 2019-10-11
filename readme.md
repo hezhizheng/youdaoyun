@@ -17,6 +17,8 @@ composer update -vvv
 打开fiddler与有道云APP 点击签到按钮 获取请求的 COOKIE 与 参数，
 
 将获取到的值替换config.php文件对应的COOKIE与PUBLIC_PARAM常量值即可。
+
+2019-10-11 更新 : PUBLIC_PARAM 没有实际验证，主要cookie正确就行
 ```
 ## 使用
 ```
